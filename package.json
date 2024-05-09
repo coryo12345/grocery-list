@@ -7,10 +7,13 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "db:generate": "drizzle-kit generate:sqlite --schema ./db/schema.ts",
+    "db:migrate": "bun run ./scripts/migrate.ts"
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
+    "drizzle-orm": "^0.30.10",
     "jsonwebtoken": "^9.0.2",
     "nuxt": "^3.11.2",
     "sass": "^1.77.0",
@@ -20,7 +23,10 @@
     "vuetify": "^3.6.4"
   },
   "devDependencies": {
+    "@types/bun": "^1.1.1",
     "@types/jsonwebtoken": "^9.0.6",
+    "dotenv": "^16.4.5",
+    "drizzle-kit": "^0.20.18",
     "prettier": "^3.2.5"
   }
 }
