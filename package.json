@@ -10,8 +10,17 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@mdi/font": "^7.4.47",
+    "jsonwebtoken": "^9.0.2",
     "nuxt": "^3.11.2",
+    "sass": "^1.77.0",
+    "vite-plugin-vuetify": "^2.0.3",
     "vue": "^3.4.21",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.0",
+    "vuetify": "^3.6.4"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.6",
+    "prettier": "^3.2.5"
   }
 }
