@@ -1,7 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const { theme } = useThemeToggle();
+</script>
 
 <template>
-  <v-app>
+  <v-app :theme="theme">
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>

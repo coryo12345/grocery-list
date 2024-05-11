@@ -8,6 +8,13 @@
       "when": 1715217406291,
       "tag": "0000_solid_colleen_wing",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1715451469193,
+      "tag": "0001_first_red_skull",
+      "breakpoints": true
     }
   ]
 }
