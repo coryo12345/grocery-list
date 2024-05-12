@@ -1,11 +1,15 @@
 <script setup lang="ts">
+import { useDisplay } from "vuetify";
+
 definePageMeta({
   layout: "blank",
 });
 const router = useRouter();
 
+const { mobile } = useDisplay();
+
 const formValid = ref(false);
-const fieldRequired = (val) =>
+const fieldRequired = (val: string) =>
   (val && val.length > 0) || "This field is required";
 
 const password = ref("");
@@ -22,7 +26,7 @@ async function signIn() {
   });
   loading.value = false;
 
-  if (resp.err) {
+  if ((resp as any).err) {
     showErr.value = true;
   } else {
     router.push("/");
@@ -31,9 +35,12 @@ async function signIn() {
 </script>
 
 <template>
-  <div class="d-flex justify-center align-center w-100 h-100">
-    <v-form v-model="formValid" @submit.prevent="signIn">
-      <v-card class="auth-card">
+  <v-form v-model="formValid" @submit.prevent="signIn" class="w-100 h-100">
+    <div
+      class="d-flex flex-col justify-center align-center w-100 h-100 px-4"
+      :class="{ 'bg-surface': mobile }"
+    >
+      <v-card class="auth-card" :elevation="mobile ? 0 : 2">
         <template #title>Sign In</template>
         <template #subtitle>Enter password to access site</template>
         <template #text>
@@ -63,12 +70,13 @@ async function signIn() {
           </v-btn>
         </template>
       </v-card>
-    </v-form>
-  </div>
+    </div>
+  </v-form>
 </template>
 
 <style scoped>
 .auth-card {
-  min-width: 400px;
+  max-width: 500px;
+  flex: 1 0 auto;
 }
 </style>

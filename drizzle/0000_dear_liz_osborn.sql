@@ -1,6 +1,19 @@
+CREATE TABLE `all_groceries` (
+	`id` integer PRIMARY KEY NOT NULL,
+	`name` text NOT NULL,
+	`description` text
+);
+--> statement-breakpoint
 CREATE TABLE `categories` (
 	`id` integer PRIMARY KEY NOT NULL,
 	`name` text NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE `grocery_list` (
+	`id` integer PRIMARY KEY NOT NULL,
+	`item_id` integer,
+	`checked` integer DEFAULT false,
+	FOREIGN KEY (`item_id`) REFERENCES `all_groceries`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `presets` (

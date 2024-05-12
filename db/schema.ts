@@ -7,9 +7,14 @@ import {
 
 export const groceryList = sqliteTable("grocery_list", {
   id: integer("id").primaryKey(),
-  name: text("name").notNull(),
+  itemId: integer("item_id").references(() => allGroceries.id),
   checked: integer("checked", { mode: "boolean" }).default(false),
-  order: integer("order"),
+});
+
+export const allGroceries = sqliteTable("all_groceries", {
+  id: integer("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description"),
 });
 
 export const categories = sqliteTable("categories", {

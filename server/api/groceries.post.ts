@@ -1,14 +1,16 @@
 import { getDb } from "~/db";
-import { groceryList } from "~/db/schema";
-import { requireAuth } from "~/server/utils/auth";
 
 export default defineEventHandler(async (event) => {
   requireAuth(event);
 
   try {
     const db = await getDb();
-    const groceries = await db.select().from(groceryList);
-    return groceries;
+    // check if item exists in master list
+    // update if it does
+    // create if it doesn't
+    // add it to grocery list
+    // return item
+    return {};
   } catch (err) {
     throw createError({
       statusCode: 500,

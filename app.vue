@@ -9,3 +9,9 @@ const { theme } = useThemeToggle();
     </NuxtLayout>
   </v-app>
 </template>
+
+<style>
+.w-fit {
+  width: fit-content;
+}
+</style>

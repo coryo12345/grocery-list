@@ -1,9 +1,10 @@
-import CONSTANTS from "~/constants";
+import { requireAuth } from "~/server/utils/auth";
 
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig(event);
-  const token = getCookie(event, CONSTANTS.JWT_COOKIE_NAME);
-  if (!token) return false;
-  const verified = verifyJwt(token, config.jwtKey);
-  return verified;
+  try {
+    requireAuth(event);
+  } catch (err) {
+    return false;
+  }
+  return true;
 });
