@@ -20,6 +20,9 @@ const { data, pending, error, refresh } = await useFetch("/api/groceries");
           {{ item }}
         </v-list-item>
       </v-list>
+      <p v-else class="text-h6 text-center mt-12">
+        Add some items to your cart to get started!
+      </p>
     </template>
   </div>
 </template>
