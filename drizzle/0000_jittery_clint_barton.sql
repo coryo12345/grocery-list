@@ -1,7 +1,8 @@
 CREATE TABLE `all_groceries` (
 	`id` integer PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
-	`description` text
+	`description` text,
+	`categories` text
 );
 --> statement-breakpoint
 CREATE TABLE `categories` (
@@ -24,4 +25,5 @@ CREATE TABLE `presets` (
 	FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
+CREATE UNIQUE INDEX `all_groceries_name_unique` ON `all_groceries` (`name`);--> statement-breakpoint
 CREATE UNIQUE INDEX `categories_name_unique` ON `categories` (`name`);

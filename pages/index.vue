@@ -12,7 +12,7 @@ const { data, pending, error, refresh } = await useFetch("/api/groceries");
     <v-progress-circular v-else-if="pending" indeterminate size="64" />
     <template v-else>
       <span class="d-block mx-auto w-fit mb-2">
-        <AddGrocery class="mr-1" />
+        <AddGrocery class="mr-1" @item-added="refresh" />
         <ClearList class="ml-1" />
       </span>
       <v-list v-if="data?.length" class="my-2">

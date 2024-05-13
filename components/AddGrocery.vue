@@ -1,17 +1,92 @@
 <script setup lang="ts">
-const { data: categories, pending, error } = useFetch("/api/categories");
+const emit = defineEmits<{
+  (e: "item-added"): void;
+}>();
+
+const {
+  data: categories,
+  pending: categoriesPending,
+  error: categoriesError,
+} = useFetch("/api/categories");
+
+const {
+  data: allGroceries,
+  pending: allGroceriesPending,
+  error: allGroceriesError,
+} = useFetch("/api/groceries/all");
+
+const _loading = ref(false);
+const loading = computed(
+  () => _loading.value || categoriesPending.value || allGroceriesPending.value,
+);
+
+const _error = ref(false);
+const error = computed(
+  () => _error.value || !!categoriesError.value || !!allGroceriesError.value,
+);
 
 const dialogValue = ref(false);
 
+const selectedItem = ref(null);
 const item = reactive({
-  name: null,
+  id: undefined,
+  name: "",
   description: "",
   categories: [],
 });
 
+watch(
+  () => selectedItem.value,
+  (newVal: any) => {
+    console.log(newVal);
+    if (newVal === null) {
+      return;
+    } else if (typeof newVal === "string") {
+      item.id = undefined;
+      item.name = newVal;
+      item.description = "";
+      item.categories = [];
+    } else if (typeof newVal === "object") {
+      item.id = newVal.id;
+      item.name = newVal.name;
+      item.description = newVal.description;
+      item.categories = newVal.categories;
+    }
+  },
+);
+
+watch(
+  () => dialogValue.value,
+  () => {
+    item.name = "";
+    item.description = "";
+    item.categories = [];
+    item.id = undefined;
+    _error.value = false;
+    _loading.value = false;
+  },
+);
+
 async function addItem() {
-  // TODO add grocery
-  dialogValue.value = false;
+  _loading.value = true;
+  try {
+    const resp = await $fetch("/api/groceries", {
+      method: "POST",
+      body: JSON.stringify({
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        categories: item.categories,
+      }),
+    });
+
+    dialogValue.value = false;
+    emit("item-added");
+  } catch (err) {
+    _error.value = true;
+  } finally {
+    _loading.value = false;
+  }
 }
 </script>
 
@@ -29,16 +104,19 @@ async function addItem() {
       </v-card-subtitle>
       <v-card-text>
         <v-combobox
-          v-model="item.name"
+          v-model="selectedItem"
           variant="outlined"
           label="Item Name"
-          :items="[]"
+          :items="allGroceries ?? []"
+          item-title="name"
+          :disabled="loading || (error && !_error)"
           auto-select-first="exact"
         />
         <v-text-field
           v-model="item.description"
           variant="outlined"
           label="Description"
+          :disabled="loading || (error && !_error)"
         />
         <v-autocomplete
           v-model="item.categories"
@@ -47,14 +125,28 @@ async function addItem() {
           :items="categories ?? []"
           item-title="name"
           item-value="id"
-          :disabled="pending || !!error"
-          :loading="pending"
+          :disabled="loading || (error && !_error)"
           multiple
         />
+        <v-alert v-if="error && !_error" type="error">
+          Something went wrong. Unable to add new items at this time.
+        </v-alert>
+        <v-alert v-if="error" type="error">
+          Unable to add item to grocery list. Ensure you do not have any
+          duplicated names
+        </v-alert>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="error" @click="dialogValue = false">Cancel</v-btn>
-        <v-btn color="success" @click="addItem">Confirm</v-btn>
+        <v-btn color="error" :disabled="loading" @click="dialogValue = false">
+          Cancel
+        </v-btn>
+        <v-btn
+          color="success"
+          :disabled="loading || (error && !_error)"
+          @click="addItem"
+        >
+          Confirm
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

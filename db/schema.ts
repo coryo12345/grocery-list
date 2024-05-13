@@ -13,8 +13,9 @@ export const groceryList = sqliteTable("grocery_list", {
 
 export const allGroceries = sqliteTable("all_groceries", {
   id: integer("id").primaryKey(),
-  name: text("name").notNull(),
+  name: text("name").notNull().unique(),
   description: text("description"),
+  categories: text("categories", { mode: "json" }),
 });
 
 export const categories = sqliteTable("categories", {

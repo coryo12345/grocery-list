@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "34b50672-44d4-42e7-a164-decc5960b8f8",
+  "id": "4121034a-a07a-48b4-9d31-d37987f02d42",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "all_groceries": {
@@ -27,9 +27,24 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
+        },
+        "categories": {
+          "name": "categories",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "all_groceries_name_unique": {
+          "name": "all_groceries_name_unique",
+          "columns": [
+            "name"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
