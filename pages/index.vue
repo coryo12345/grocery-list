@@ -35,7 +35,7 @@ async function toggleItem(
     <template v-else>
       <span class="d-block mx-auto w-fit mb-2">
         <AddGrocery class="mr-1" @item-added="refresh" />
-        <ClearList class="ml-1" />
+        <ClearList class="ml-1" @items-cleared="refresh" />
       </span>
       <v-list v-if="data?.length" class="my-2">
         <v-list-item v-for="(item, idx) in data" :key="idx">
