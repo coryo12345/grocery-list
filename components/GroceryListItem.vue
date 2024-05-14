@@ -64,10 +64,10 @@ async function deleteItem() {
       @click="deleteItem"
     ></v-btn>
     <div>
-      <span class="d-block">{{ item.all_groceries.name }}</span>
-      <span class="d-block text-caption text-wrap">
+      <v-list-item-title>{{ item.all_groceries.name }}</v-list-item-title>
+      <v-list-item-subtitle>
         {{ item.all_groceries.description }}
-      </span>
+      </v-list-item-subtitle>
     </div>
     <v-spacer />
     <span>

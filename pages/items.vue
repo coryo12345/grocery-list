@@ -1,6 +1,66 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const { data, pending, error, refresh } = await useFetch("/api/groceries/all");
+const {
+  data: categories,
+  pending: categoriesPending,
+  error: categoriesError,
+  refresh: categoriesRefresh,
+} = await useFetch("/api/categories");
+
+const page = ref(1);
+const search = ref("");
+const categoryFilter = ref<number[]>([]);
+
+const filteredRows = computed(() => {
+  return data.value?.filter((item) => {
+    const inCategories =
+      categoryFilter.value.length === 0 ||
+      item.categories.some((c) => categoryFilter.value.includes(c));
+    const matchesSearch =
+      item.name.toLowerCase().includes(search.value.toLowerCase()) ||
+      item.description?.toLowerCase().includes(search.value.toLowerCase());
+    return inCategories && matchesSearch;
+  });
+});
+</script>
 
 <template>
-  <p>manage grocery items</p>
-  <v-checkbox label="Only Recurring Items" />
+  <h1 class="text-h4 font-weight-bold text-center">Manage Grocery Items</h1>
+  <p>TODO: add an edit dialog</p>
+  <p>TODO: "add item" dialog</p>
+
+  <v-text-field
+    v-model="search"
+    variant="outlined"
+    label="Search"
+    hide-details
+    class="my-3"
+  />
+  <v-select
+    v-model="categoryFilter"
+    :items="categories ?? []"
+    item-title="name"
+    item-value="id"
+    variant="outlined"
+    label="Categories"
+    hide-details
+    multiple
+    class="my-3"
+  />
+
+  <v-list>
+    <v-data-iterator :items="filteredRows" :page="page">
+      <template #default="{ items }">
+        <v-list-item v-for="item in items" :key="item.raw.id">
+          <v-list-item-title>{{ item.raw.name }}</v-list-item-title>
+          <v-list-item-subtitle>
+            {{ item.raw.description }}
+          </v-list-item-subtitle>
+        </v-list-item>
+      </template>
+      <template #footer="{ pageCount }">
+        <v-pagination v-model="page" :length="pageCount" rounded="circle" />
+      </template>
+    </v-data-iterator>
+  </v-list>
 </template>

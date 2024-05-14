@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     const allItems = await db.select().from(allGroceries);
     return allItems.map((item) => ({
       ...item,
-      categories: JSON.parse(item.categories as string),
+      categories: JSON.parse(item.categories as string) as number[],
     }));
   } catch (err) {
     throw createError({
