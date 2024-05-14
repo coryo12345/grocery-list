@@ -7,13 +7,13 @@ const {
   data: categories,
   pending: categoriesPending,
   error: categoriesError,
-} = useFetch("/api/categories");
+} = await useFetch("/api/categories");
 
 const {
   data: allGroceries,
   pending: allGroceriesPending,
   error: allGroceriesError,
-} = useFetch("/api/groceries/all");
+} = await useFetch("/api/groceries/all");
 
 const _loading = ref(false);
 const loading = computed(

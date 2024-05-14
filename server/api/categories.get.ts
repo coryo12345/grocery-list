@@ -6,7 +6,10 @@ export default defineEventHandler(async (event) => {
 
   try {
     const db = await getDb();
-    const categories = await db.select().from(categoriesTable);
+    const categories = await db
+      .select()
+      .from(categoriesTable)
+      .orderBy(categoriesTable.name);
     return categories;
   } catch (err) {
     throw createError({

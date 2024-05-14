@@ -26,6 +26,7 @@ const showNavDrawer = ref(false);
     <v-list>
       <v-list-item to="/">Grocery List</v-list-item>
       <v-list-item to="items">Manage Grocery Items</v-list-item>
+      <v-list-item to="/categories">Categories</v-list-item>
       <v-list-item to="/stores">Stores</v-list-item>
     </v-list>
   </v-navigation-drawer>

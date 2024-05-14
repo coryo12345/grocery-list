@@ -37,6 +37,14 @@ async function toggleItem(
         <AddGrocery class="mr-1" @item-added="refresh" />
         <ClearList class="ml-1" @items-cleared="refresh" />
       </span>
+      <v-select
+        :model-value="'None'"
+        :items="['None', 'Wegmans']"
+        variant="outlined"
+        label="Choose Store (for sorting)"
+        class="mt-6"
+        hide-details
+      />
       <v-list v-if="data?.length" class="my-2">
         <v-list-item v-for="(item, idx) in data" :key="idx">
           <div class="w-100 d-flex justify-space-between align-center">
