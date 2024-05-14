@@ -50,6 +50,25 @@ async function saveName() {
     loading.value = false;
   }
 }
+
+async function deleteCategory() {
+  error.value = false;
+  loading.value = true;
+  try {
+    const resp = await $fetch("/api/categories", {
+      method: "DELETE",
+      body: JSON.stringify({
+        id: props.category.id,
+      }),
+    });
+    emit("category-changed");
+    editing.value = false;
+  } catch (err) {
+    error.value = true;
+  } finally {
+    loading.value = false;
+  }
+}
 </script>
 
 <template>
@@ -63,6 +82,7 @@ async function saveName() {
         v-model="name"
         ref="textField"
         :rules="[required, nameAvailable]"
+        @blur="editing = false"
       >
         <template #append-inner>
           <v-btn
@@ -72,14 +92,15 @@ async function saveName() {
             :disabled="!valid"
             :loading="loading"
             @click="saveName"
+            @keydown.enter="saveName"
           ></v-btn>
         </template>
         <template #append>
           <v-btn
-            icon="mdi-cancel"
+            icon="mdi-delete"
             variant="text"
             class="ml-n2"
-            @click="editing = false"
+            @mousedown="deleteCategory"
           ></v-btn>
         </template>
       </v-text-field>
