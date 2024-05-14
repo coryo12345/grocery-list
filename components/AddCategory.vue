@@ -3,9 +3,14 @@ const props = defineProps<{
   usedNames: string[];
 }>();
 
+const emit = defineEmits<{
+  (e: "category-changed"): void;
+}>();
+
 const dialog = ref(false);
 const loading = ref(false);
 const valid = ref(false);
+const error = ref(false);
 
 const name = ref("");
 
@@ -25,9 +30,22 @@ const nameAvailable = (val: string) =>
 const required = (val: string) => !!val.length || "Field is required";
 
 async function addCategory() {
-  // TODO
-  //   validate that name is not in use
-  dialog.value = false;
+  loading.value = true;
+  error.value = false;
+  try {
+    await $fetch("/api/categories", {
+      method: "PUT",
+      body: JSON.stringify({
+        name: name.value,
+      }),
+    });
+    emit("category-changed");
+    dialog.value = false;
+  } catch (err) {
+    error.value = true;
+  } finally {
+    loading.value = false;
+  }
 }
 </script>
 
@@ -48,6 +66,9 @@ async function addCategory() {
             variant="outlined"
             :rules="[required, nameAvailable]"
           />
+          <v-alert v-if="error" type="error">
+            Unable to save new group. Try again later.
+          </v-alert>
         </v-card-text>
         <v-card-actions>
           <v-btn color="error" @click="dialog = false">Cancel</v-btn>

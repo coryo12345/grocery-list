@@ -14,6 +14,8 @@ const editing = ref(false);
 const valid = ref(false);
 const name = ref(props.category.name);
 const textField = ref(null);
+const error = ref(false);
+const loading = ref(false);
 
 const nameAvailable = (val: string) =>
   !props.usedNames.some((name) => name.toLowerCase() === val.toLowerCase()) ||
@@ -30,8 +32,23 @@ function setEditing() {
 }
 
 async function saveName() {
-  // TODO
-  editing.value = false;
+  try {
+    error.value = false;
+    loading.value = true;
+    await $fetch("/api/categories", {
+      method: "POST",
+      body: JSON.stringify({
+        id: props.category.id,
+        name: name.value,
+      }),
+    });
+    emit("category-changed");
+    editing.value = false;
+  } catch (err) {
+    error.value = true;
+  } finally {
+    loading.value = false;
+  }
 }
 </script>
 
@@ -53,6 +70,8 @@ async function saveName() {
             variant="text"
             type="submit"
             :disabled="!valid"
+            :loading="loading"
+            @click="saveName"
           ></v-btn>
         </template>
         <template #append>
@@ -66,4 +85,7 @@ async function saveName() {
       </v-text-field>
     </v-form>
   </template>
+  <v-snackbar v-model="error" color="error" :timeout="8000">
+    Unable to save changes
+  </v-snackbar>
 </template>
