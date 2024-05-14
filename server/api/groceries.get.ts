@@ -3,6 +3,7 @@ import { getDb } from "~/db";
 import { allGroceries, groceryList } from "~/db/schema";
 import { requireAuth } from "~/server/utils/auth";
 
+// GET ALL GROCERIES
 export default defineEventHandler(async (event) => {
   requireAuth(event);
 

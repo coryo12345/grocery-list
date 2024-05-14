@@ -1,6 +1,7 @@
 import { getDb } from "~/db";
 import { allGroceries } from "~/db/schema";
 
+// GETS ALL GROCERY_ITEMS (ignoring current list)
 export default defineEventHandler(async (event) => {
   requireAuth(event);
 
