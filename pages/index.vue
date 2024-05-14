@@ -27,6 +27,7 @@ async function toggleItem(
 <template>
   <div>
     <h1 class="text-h4 font-weight-bold text-center mb-2">Grocery List</h1>
+    <p>TODO: delete individual items</p>
     <v-alert v-if="error" type="error" class="mt-2">
       <h6 class="text-h6">Something went wrong...</h6>
       <p>Unable to fetch current grocery list</p>
