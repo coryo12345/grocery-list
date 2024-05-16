@@ -13,7 +13,7 @@ const {
   data: allGroceries,
   pending: allGroceriesPending,
   error: allGroceriesError,
-} = await useFetch("/api/groceries/all");
+} = await useFetch("/api/groceryItem");
 
 const _loading = ref(false);
 const loading = computed(
@@ -38,7 +38,6 @@ const item = reactive({
 watch(
   () => selectedItem.value,
   (newVal: any) => {
-    console.log(newVal);
     if (newVal === null) {
       return;
     } else if (typeof newVal === "string") {

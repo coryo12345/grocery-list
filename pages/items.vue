@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { data, pending, error, refresh } = await useFetch("/api/groceries/all");
+const { data, pending, error, refresh } = await useFetch("/api/groceryItem");
 const {
   data: categories,
   pending: categoriesPending,
@@ -22,12 +22,21 @@ const filteredRows = computed(() => {
     return inCategories && matchesSearch;
   });
 });
+
+const usedNames = computed(() => data.value?.map((item) => item.name) ?? []);
 </script>
 
 <template>
   <h1 class="text-h4 font-weight-bold text-center">Manage Grocery Items</h1>
   <p>TODO: add an edit dialog</p>
-  <p>TODO: "add item" dialog</p>
+
+  <div class="d-flex justify-center">
+    <AddGroceryItem
+      :categories="categories ?? []"
+      :used-names="usedNames"
+      @item-added="refresh"
+    />
+  </div>
 
   <v-text-field
     v-model="search"

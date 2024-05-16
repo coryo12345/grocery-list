@@ -10,9 +10,10 @@ export default defineEventHandler(async (event) => {
     const allItems = await db.select().from(allGroceries);
     return allItems.map((item) => ({
       ...item,
-      categories: JSON.parse(item.categories as string) as number[],
+      categories: item.categories as number[],
     }));
   } catch (err) {
+    console.error(err);
     throw createError({
       statusCode: 500,
       message: "something went wrong",

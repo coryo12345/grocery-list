@@ -19,10 +19,7 @@ export default defineEventHandler(async (event) => {
         .set({
           name: body.name,
           description: body.description,
-          categories:
-            typeof body.categories === "string"
-              ? body.categories
-              : JSON.stringify(body.categories),
+          categories: body.categories,
         })
         .where(eq(allGroceries.id, id));
     } else {
@@ -31,10 +28,7 @@ export default defineEventHandler(async (event) => {
         .values({
           name: body.name,
           description: body.description,
-          categories:
-            typeof body.categories === "string"
-              ? body.categories
-              : JSON.stringify(body.categories),
+          categories: body.categories,
         })
         .returning();
       itemId = item[0].id;
