@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { getDb } from "~/db";
-import { categories } from "~/db/schema";
+import { allGroceries, categories } from "~/db/schema";
 
 // DELETE a category
 export default defineEventHandler(async (event) => {
@@ -15,10 +15,24 @@ export default defineEventHandler(async (event) => {
     });
   }
 
+  const db = await getDb();
+
   try {
-    const db = await getDb();
-    await db.delete(categories).where(eq(categories.id, body.id));
+    await db.transaction(async (tx) => {
+      await tx.delete(categories).where(eq(categories.id, body.id));
+
+      // now update all_groceries to remove category from items
+      const updateQuery = sql`update ${allGroceries}`;
+      updateQuery.append(
+        sql.raw(
+          ` set ${allGroceries.categories.name} = (select json_group_array(value) from json_each(${allGroceries.categories.name})`,
+        ),
+      );
+      updateQuery.append(sql` where json_each.value <> ${body.id});`);
+      await tx.run(updateQuery);
+    });
   } catch (err) {
+    console.error(err);
     throw createError({
       statusCode: 500,
       message: "something went wrong",
