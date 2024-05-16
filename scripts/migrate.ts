@@ -1,12 +1,11 @@
-import { migrate } from "drizzle-orm/bun-sqlite/migrator";
+// import { migrate } from "drizzle-orm/bun-sqlite/migrator";
 
-import { drizzle } from "drizzle-orm/bun-sqlite";
-import { Database } from "bun:sqlite";
-import { categories } from "~/db/schema";
 import { sql } from "drizzle-orm";
+import { migrate } from "drizzle-orm/libsql/migrator";
+import { getDb } from "~/db";
+import { categories } from "~/db/schema";
 
-const sqlite = new Database("sqlite.db");
-const db = drizzle(sqlite);
+const db = await getDb();
 await migrate(db, { migrationsFolder: "./drizzle" });
 
 // seed any required data
