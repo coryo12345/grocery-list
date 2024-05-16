@@ -29,6 +29,7 @@ const usedNames = computed(() => data.value?.map((item) => item.name) ?? []);
 <template>
   <h1 class="text-h4 font-weight-bold text-center">Manage Grocery Items</h1>
   <p>TODO: add an edit dialog</p>
+  <p>TODO: allow for deletion</p>
 
   <div class="d-flex justify-center">
     <AddGroceryItem

@@ -102,6 +102,7 @@ async function addItem() {
         Add a new grocery, or select a pre-existing item
       </v-card-subtitle>
       <v-card-text>
+        <p>TODO: add count field</p>
         <v-combobox
           v-model="selectedItem"
           variant="outlined"
