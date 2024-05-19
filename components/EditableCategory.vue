@@ -10,11 +10,12 @@ const emit = defineEmits<{
   (e: "category-changed"): void;
 }>();
 
+const toast = useToast();
+
 const editing = ref(false);
 const valid = ref(false);
 const name = ref(props.category.name);
 const textField = ref(null);
-const error = ref(false);
 const loading = ref(false);
 
 const nameAvailable = (val: string) =>
@@ -33,7 +34,6 @@ function setEditing() {
 
 async function saveName() {
   try {
-    error.value = false;
     loading.value = true;
     await $fetch("/api/categories", {
       method: "POST",
@@ -45,14 +45,13 @@ async function saveName() {
     emit("category-changed");
     editing.value = false;
   } catch (err) {
-    error.value = true;
+    toast.error("Something went wrong... we couldn't change this name");
   } finally {
     loading.value = false;
   }
 }
 
 async function deleteCategory() {
-  error.value = false;
   loading.value = true;
   try {
     const resp = await $fetch("/api/categories", {
@@ -64,7 +63,7 @@ async function deleteCategory() {
     emit("category-changed");
     editing.value = false;
   } catch (err) {
-    error.value = true;
+    toast.error("Something went wrong... we couldn't delete this category");
   } finally {
     loading.value = false;
   }
@@ -106,7 +105,4 @@ async function deleteCategory() {
       </v-text-field>
     </v-form>
   </template>
-  <v-snackbar v-model="error" color="error" :timeout="8000">
-    Unable to save changes
-  </v-snackbar>
 </template>

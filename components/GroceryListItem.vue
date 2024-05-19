@@ -14,11 +14,10 @@ const emit = defineEmits<{
   (e: "item-deleted"): void;
 }>();
 
-const toggleError = ref(false);
+const toast = useToast();
 
 async function toggleItem() {
   (props.item as any).loading = true;
-  toggleError.value = false;
   try {
     const resp = await $fetch("/api/groceries", {
       method: "PUT",
@@ -29,7 +28,7 @@ async function toggleItem() {
     });
     props.item.grocery_list.checked = !props.item.grocery_list.checked;
   } catch (err) {
-    toggleError.value = true;
+    toast.error("Something went wrong... unable to update this item");
   } finally {
     (props.item as any).loading = false;
   }
@@ -37,7 +36,6 @@ async function toggleItem() {
 
 async function deleteItem() {
   (props.item as any).loading = true;
-  toggleError.value = false;
   try {
     const resp = await $fetch("/api/groceries", {
       method: "DELETE",
@@ -47,7 +45,7 @@ async function deleteItem() {
     });
     emit("item-deleted");
   } catch (err) {
-    toggleError.value = true;
+    toast.error("Something went wrong... unable to delete this item");
   } finally {
     (props.item as any).loading = false;
   }
@@ -87,8 +85,4 @@ async function deleteItem() {
       />
     </span>
   </div>
-  <v-snackbar v-model="toggleError" color="error" multi-line :timeout="8000">
-    <p class="text-h6">Something went wrong.</p>
-    <p>Unable to update this item.</p>
-  </v-snackbar>
 </template>
