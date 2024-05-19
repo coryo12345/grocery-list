@@ -61,8 +61,9 @@ async function clear() {
           :loading="loading"
           :disabled="loading"
           @click="clear"
-          >Confirm</v-btn
         >
+          Confirm
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
