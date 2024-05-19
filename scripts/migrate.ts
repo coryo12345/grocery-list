@@ -1,5 +1,3 @@
-// import { migrate } from "drizzle-orm/bun-sqlite/migrator";
-
 import { sql } from "drizzle-orm";
 import { migrate } from "drizzle-orm/libsql/migrator";
 import { getDb } from "~/db";

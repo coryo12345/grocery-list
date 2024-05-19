@@ -131,3 +131,5 @@ dist
 
 # DB
 *.db
+*.db-shm
+*.db-wal

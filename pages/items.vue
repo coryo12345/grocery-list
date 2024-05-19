@@ -29,7 +29,6 @@ const usedNames = computed(() => data.value?.map((item) => item.name) ?? []);
 <template>
   <h1 class="text-h4 font-weight-bold text-center">Manage Grocery Items</h1>
   <p>TODO: add an edit dialog</p>
-  <p>TODO: allow for deletion</p>
 
   <div class="d-flex justify-center">
     <AddGroceryItem
@@ -61,12 +60,12 @@ const usedNames = computed(() => data.value?.map((item) => item.name) ?? []);
   <v-list>
     <v-data-iterator :items="filteredRows" :page="page">
       <template #default="{ items }">
-        <v-list-item v-for="item in items" :key="item.raw.id">
-          <v-list-item-title>{{ item.raw.name }}</v-list-item-title>
-          <v-list-item-subtitle>
-            {{ item.raw.description }}
-          </v-list-item-subtitle>
-        </v-list-item>
+        <ManageGroceryItem
+          v-for="item in items"
+          :key="item.raw.id"
+          :item="item.raw"
+          @item-changed="refresh"
+        />
       </template>
       <template #footer="{ pageCount }">
         <v-pagination v-model="page" :length="pageCount" rounded="circle" />

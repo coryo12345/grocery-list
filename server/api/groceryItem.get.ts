@@ -7,7 +7,10 @@ export default defineEventHandler(async (event) => {
 
   try {
     const db = await getDb();
-    const allItems = await db.select().from(allGroceries);
+    const allItems = await db
+      .select()
+      .from(allGroceries)
+      .orderBy(allGroceries.name);
     return allItems.map((item) => ({
       ...item,
       categories: item.categories as number[],

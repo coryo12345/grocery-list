@@ -7,6 +7,7 @@ const { theme } = useThemeToggle();
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
+    <AppToaster />
   </v-app>
 </template>
 
