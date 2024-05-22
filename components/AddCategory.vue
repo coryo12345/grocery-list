@@ -27,8 +27,6 @@ const nameAvailable = (val: string) =>
   !props.usedNames.some((name) => name.toLowerCase() === val.toLowerCase()) ||
   "Name already in use";
 
-const required = (val: string) => !!val.length || "Field is required";
-
 async function addCategory() {
   loading.value = true;
   error.value = false;
@@ -64,7 +62,7 @@ async function addCategory() {
             v-model="name"
             label="Category Name"
             variant="outlined"
-            :rules="[required, nameAvailable]"
+            :rules="[formRules.required, nameAvailable]"
           />
           <v-alert v-if="error" type="error">
             Unable to save new group. Try again later.

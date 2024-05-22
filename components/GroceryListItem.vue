@@ -62,10 +62,18 @@ async function deleteItem() {
       @click="deleteItem"
     ></v-btn>
     <div>
-      <v-list-item-title>{{ item.all_groceries.name }}</v-list-item-title>
+      <v-list-item-title>
+        {{ item.all_groceries.name }}
+        <span v-if="item.grocery_list.count">
+          x{{ item.grocery_list.count }}
+        </span>
+      </v-list-item-title>
       <v-list-item-subtitle>
         {{ item.all_groceries.description }}
       </v-list-item-subtitle>
+      <p v-if="item.grocery_list.note" class="font-weight-bold">
+        {{ item.grocery_list.note }}
+      </p>
     </div>
     <v-spacer />
     <span>

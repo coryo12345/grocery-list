@@ -23,8 +23,6 @@ const nameAvailable = (val: string) =>
   val.toLowerCase() === props.category.name.toLowerCase() ||
   "Name already in use";
 
-const required = (val: string) => !!val.length || "Field is required";
-
 function setEditing() {
   editing.value = true;
   nextTick(() => {
@@ -80,7 +78,7 @@ async function deleteCategory() {
       <v-text-field
         v-model="name"
         ref="textField"
-        :rules="[required, nameAvailable]"
+        :rules="[formRules.required, nameAvailable]"
         @blur="editing = false"
       >
         <template #append-inner>

@@ -9,6 +9,8 @@ export const groceryList = sqliteTable("grocery_list", {
   id: integer("id").primaryKey(),
   itemId: integer("item_id").references(() => allGroceries.id),
   checked: integer("checked", { mode: "boolean" }).default(false),
+  count: integer("item_count"),
+  note: text("note"),
 });
 
 export const allGroceries = sqliteTable("all_groceries", {

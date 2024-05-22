@@ -35,7 +35,6 @@ watch(
 
 const nameNotInUse = (val: string) =>
   !props.usedNames.includes(val) || "This name is already in use";
-const required = (val: string) => val.length > 0 || "This field is required";
 
 function submit() {
   if (props.item) {
@@ -110,14 +109,14 @@ async function editItem() {
             v-model="mutableItem.name"
             label="Name"
             variant="outlined"
-            :rules="[nameNotInUse, required]"
+            :rules="[nameNotInUse, formRules.required]"
             class="mb-2"
           />
           <v-text-field
             v-model="mutableItem.description"
             label="Description"
             variant="outlined"
-            :rules="[required]"
+            :rules="[formRules.required]"
             class="mb-2"
           />
           <v-select

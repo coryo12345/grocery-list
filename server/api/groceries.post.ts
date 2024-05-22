@@ -8,6 +8,13 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const id = body.id;
 
+  if (!body.name || body.name.length < 1) {
+    throw createError({
+      statusCode: 400,
+      message: "Name is required and may not be empty",
+    });
+  }
+
   try {
     const db = await getDb();
     let itemId;
@@ -36,7 +43,12 @@ export default defineEventHandler(async (event) => {
 
     const item = await db
       .insert(groceryList)
-      .values({ itemId: itemId, checked: false })
+      .values({
+        itemId: itemId,
+        checked: false,
+        count: body.count,
+        note: body.note,
+      })
       .returning();
 
     return item;

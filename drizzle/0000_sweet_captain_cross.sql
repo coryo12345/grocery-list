@@ -14,6 +14,8 @@ CREATE TABLE `grocery_list` (
 	`id` integer PRIMARY KEY NOT NULL,
 	`item_id` integer,
 	`checked` integer DEFAULT false,
+	`item_count` integer,
+	`note` text,
 	FOREIGN KEY (`item_id`) REFERENCES `all_groceries`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint

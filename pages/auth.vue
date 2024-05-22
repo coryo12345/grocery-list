@@ -9,8 +9,6 @@ const router = useRouter();
 const { mobile } = useDisplay();
 
 const formValid = ref(false);
-const fieldRequired = (val: string) =>
-  (val && val.length > 0) || "This field is required";
 
 const password = ref("");
 const showErr = ref(false);
@@ -49,7 +47,7 @@ async function signIn() {
             label="Password"
             type="password"
             variant="outlined"
-            :rules="[fieldRequired]"
+            :rules="[formRules.required]"
             :disabled="loading"
           />
           <v-alert
