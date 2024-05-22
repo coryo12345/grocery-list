@@ -28,10 +28,8 @@ const usedNames = computed(() => data.value?.map((item) => item.name) ?? []);
 
 <template>
   <h1 class="text-h4 font-weight-bold text-center">Manage Grocery Items</h1>
-  <p>TODO: add an edit dialog</p>
-
   <div class="d-flex justify-center">
-    <AddGroceryItem
+    <AddEditGroceryItem
       :categories="categories ?? []"
       :used-names="usedNames"
       @item-added="refresh"
@@ -64,6 +62,8 @@ const usedNames = computed(() => data.value?.map((item) => item.name) ?? []);
           v-for="item in items"
           :key="item.raw.id"
           :item="item.raw"
+          :categories="categories ?? []"
+          :used-names="usedNames"
           @item-changed="refresh"
         />
       </template>

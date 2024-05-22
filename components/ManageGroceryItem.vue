@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import type { allGroceries } from "~/db/schema";
+import { allGroceries, categories } from "~/db/schema";
 
 const props = defineProps<{
+  usedNames: string[];
+  categories: (typeof categories.$inferSelect)[];
   item: typeof allGroceries.$inferSelect;
 }>();
 const emit = defineEmits<{
@@ -36,6 +38,11 @@ async function deleteItem() {
       {{ props.item.description }}
     </v-list-item-subtitle>
     <div class="position-absolute right-0 top-0 h-100 d-flex align-center">
+      <AddEditGroceryItem
+        :categories="props.categories"
+        :used-names="props.usedNames"
+        :item="props.item"
+      />
       <ConfirmDialog
         text="Deleting this item will also delete all occurances of this item from your current grocery list"
         @save="deleteItem"

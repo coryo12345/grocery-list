@@ -15,6 +15,16 @@ const dialogModel = ref(false);
 function onClick() {
   dialogModel.value = true;
 }
+
+function cancel() {
+  dialogModel.value = false;
+  emit("cancel");
+}
+
+async function save() {
+  await emit("save");
+  dialogModel.value = false;
+}
 </script>
 
 <template>
@@ -38,8 +48,8 @@ function onClick() {
 
         <template v-slot:actions>
           <v-spacer></v-spacer>
-          <v-btn color="error" @click="emit('cancel')">Cancel</v-btn>
-          <v-btn color="success" @click="emit('save')">Confirm</v-btn>
+          <v-btn color="error" @click="cancel">Cancel</v-btn>
+          <v-btn color="success" @click="save">Confirm</v-btn>
         </template>
       </v-card>
     </v-dialog>

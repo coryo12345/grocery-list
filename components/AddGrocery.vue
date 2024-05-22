@@ -103,6 +103,7 @@ async function addItem() {
       </v-card-subtitle>
       <v-card-text>
         <p>TODO: add count field</p>
+        <p>TODO: add temporary note</p>
         <v-combobox
           v-model="selectedItem"
           variant="outlined"

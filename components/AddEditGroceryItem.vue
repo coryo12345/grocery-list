@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { categories } from "~/db/schema";
+import { allGroceries, categories } from "~/db/schema";
 
 const props = defineProps<{
   usedNames: string[];
   categories: (typeof categories.$inferSelect)[];
+  item?: typeof allGroceries.$inferSelect;
 }>();
 
 const emit = defineEmits<{
@@ -13,45 +14,66 @@ const emit = defineEmits<{
 const dialog = ref(false);
 const valid = ref(false);
 const loading = ref(false);
-const error = ref(false);
+const error = ref<string | null>(null);
+
+const mutableItem = reactive({
+  name: props.item?.name ?? "",
+  description: props.item?.description ?? "",
+  categories: props.item?.categories ?? [],
+});
 
 watch(
-  () => dialog.value,
+  () => [dialog.value, props.item],
   (newVal) => {
-    if (newVal) {
-      item.name = "";
-      item.description = "";
-      item.categories = [];
+    if (newVal[0] === true) {
+      mutableItem.name = props.item?.name ?? "";
+      mutableItem.description = props.item?.description ?? "";
+      mutableItem.categories = props.item?.categories ?? [];
     }
   },
 );
-
-const item = reactive({
-  name: "",
-  description: "",
-  categories: [],
-});
 
 const nameNotInUse = (val: string) =>
   !props.usedNames.includes(val) || "This name is already in use";
 const required = (val: string) => val.length > 0 || "This field is required";
 
+function submit() {
+  if (props.item) {
+    editItem();
+  } else {
+    addItem();
+  }
+}
+
 async function addItem() {
   loading.value = true;
-  error.value = false;
+  error.value = null;
   try {
     const resp = await $fetch("/api/groceryItem", {
       method: "POST",
       body: JSON.stringify({
-        name: item.name,
-        description: item.description,
-        categories: item.categories,
+        name: mutableItem.name,
+        description: mutableItem.description,
+        categories: mutableItem.categories,
       }),
     });
     emit("item-added");
     dialog.value = false;
   } catch (err) {
-    error.value = true;
+    error.value = "Unable to add this item";
+  } finally {
+    loading.value = false;
+  }
+}
+
+async function editItem() {
+  loading.value = true;
+  error.value = null;
+  try {
+    emit("item-added");
+    dialog.value = false;
+  } catch (err) {
+    error.value = "Unable to save your changes";
   } finally {
     loading.value = false;
   }
@@ -61,33 +83,45 @@ async function addItem() {
 <template>
   <v-dialog v-model="dialog">
     <template #activator>
-      <v-btn v-bind="$attrs" color="success" @click="dialog = true">
+      <v-btn
+        v-if="!props.item"
+        v-bind="$attrs"
+        color="success"
+        @click="dialog = true"
+      >
         Add Item
       </v-btn>
+      <v-btn
+        v-else
+        @click="dialog = true"
+        icon="mdi-pencil"
+        variant="text"
+      ></v-btn>
     </template>
-    <v-form v-model="valid" @submit.prevent="addItem">
+    <v-form v-model="valid" @submit.prevent="submit">
       <v-card>
-        <v-card-title>Add Item</v-card-title>
-        <v-card-subtitle>
+        <v-card-title>{{ props.item ? "Edit Item" : "Add Item" }}</v-card-title>
+        <v-card-subtitle v-if="!props.item">
           Add an item to be reused in future lists
         </v-card-subtitle>
         <v-card-text>
+          <v-alert v-if="error" type="error">{{ error }}</v-alert>
           <v-text-field
-            v-model="item.name"
+            v-model="mutableItem.name"
             label="Name"
             variant="outlined"
             :rules="[nameNotInUse, required]"
             class="mb-2"
           />
           <v-text-field
-            v-model="item.description"
+            v-model="mutableItem.description"
             label="Description"
             variant="outlined"
             :rules="[required]"
             class="mb-2"
           />
           <v-select
-            v-model="item.categories"
+            v-model="mutableItem.categories"
             :items="props.categories"
             item-title="name"
             item-value="id"
@@ -111,8 +145,9 @@ async function addItem() {
             type="submit"
             :loading="loading"
             :disabled="!valid || loading"
-            >Submit</v-btn
           >
+            Save
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-form>
