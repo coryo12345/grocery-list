@@ -128,12 +128,14 @@ async function addItem() {
             :rules="[customNameRequired]"
             :disabled="fieldsDisabled"
             auto-select-first="exact"
+            class="mb-2"
           />
           <v-text-field
             v-model="item.description"
             variant="outlined"
             label="Description"
             :disabled="fieldsDisabled"
+            class="mb-2"
           />
           <v-autocomplete
             v-model="item.categories"
@@ -144,6 +146,7 @@ async function addItem() {
             item-value="id"
             :disabled="fieldsDisabled"
             multiple
+            class="mb-2"
           />
           <v-text-field
             v-model="item.count"
@@ -152,12 +155,14 @@ async function addItem() {
             variant="outlined"
             :rules="[formRules.integer]"
             :disabled="fieldsDisabled"
+            class="mb-2"
           />
           <v-text-field
             v-model="item.note"
             label="Note"
             variant="outlined"
             :disabled="fieldsDisabled"
+            class="mb-2"
           />
           <p class="font-italic text-body-2">
             A note is a temporary description that will not be saved for the
