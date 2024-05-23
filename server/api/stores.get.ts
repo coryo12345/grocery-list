@@ -1,5 +1,5 @@
 import { getDb } from "~/db";
-import { presets } from "~/db/schema";
+import { categories, presets } from "~/db/schema";
 
 // GETS ALL stores
 export default defineEventHandler(async (event) => {
@@ -7,8 +7,21 @@ export default defineEventHandler(async (event) => {
 
   try {
     const db = await getDb();
-    const stores = await db.select().from(presets);
-    // TODO need to add in missing categories and remove deleted categories by id
+    const categoryIds = await db.select({ id: categories.id }).from(categories);
+    const storesRaw = await db.select().from(presets);
+    let stores = storesRaw.map((store) => {
+      // remove deleted categories
+      store.categories = store.categories.filter((id) =>
+        categoryIds.find((c) => c.id === id),
+      );
+      // add in missing categories to end
+      categoryIds.forEach((c) => {
+        if (!store.categories.includes(c.id)) {
+          store.categories.push(c.id);
+        }
+      });
+      return store;
+    });
     return stores;
   } catch (err) {
     console.error(err);

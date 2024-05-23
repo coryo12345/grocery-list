@@ -1,5 +1,5 @@
 import { getDb } from "~/db";
-import { presets } from "~/db/schema";
+import { categories, presets } from "~/db/schema";
 
 // add a store
 export default defineEventHandler(async (event) => {
@@ -9,13 +9,21 @@ export default defineEventHandler(async (event) => {
 
   try {
     const db = await getDb();
-    // TODO set initial category list to current category set (alphabetically)
-    // should wrap it in a transaction
-    const stores = await db
-      .insert(presets)
-      .values({ name: body.name, categories: [] })
-      .returning();
-    return stores[0];
+
+    const newStore = await db.transaction(async (tx) => {
+      const categoryIdsRaw = await db
+        .select({ id: categories.id })
+        .from(categories)
+        .orderBy(categories.name);
+      const categoryIds = categoryIdsRaw.map((x) => x.id);
+      const stores = await db
+        .insert(presets)
+        .values({ name: body.name, categories: categoryIds })
+        .returning();
+      return stores[0];
+    });
+
+    return newStore;
   } catch (err) {
     console.error(err);
     throw createError({

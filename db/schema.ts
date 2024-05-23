@@ -17,7 +17,7 @@ export const allGroceries = sqliteTable("all_groceries", {
   id: integer("id").primaryKey(),
   name: text("name").notNull().unique(),
   description: text("description"),
-  categories: text("categories", { mode: "json" }),
+  categories: text("categories", { mode: "json" }).$type<number[]>(),
 });
 
 export const categories = sqliteTable("categories", {
@@ -28,5 +28,5 @@ export const categories = sqliteTable("categories", {
 export const presets = sqliteTable("presets", {
   id: integer("id").primaryKey(),
   name: text("name").notNull().unique(),
-  categories: text("categories", { mode: "json" }).notNull(),
+  categories: text("categories", { mode: "json" }).notNull().$type<number[]>(),
 });

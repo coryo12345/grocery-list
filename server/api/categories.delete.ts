@@ -1,6 +1,6 @@
 import { eq, sql } from "drizzle-orm";
 import { getDb } from "~/db";
-import { allGroceries, categories } from "~/db/schema";
+import { allGroceries, categories, presets } from "~/db/schema";
 
 // DELETE a category
 export default defineEventHandler(async (event) => {
@@ -22,14 +22,24 @@ export default defineEventHandler(async (event) => {
       await tx.delete(categories).where(eq(categories.id, body.id));
 
       // now update all_groceries to remove category from items
-      const updateQuery = sql`update ${allGroceries}`;
-      updateQuery.append(
+      const updateGroceriesQuery = sql`update ${allGroceries}`;
+      updateGroceriesQuery.append(
         sql.raw(
           ` set ${allGroceries.categories.name} = (select json_group_array(value) from json_each(${allGroceries.categories.name})`,
         ),
       );
-      updateQuery.append(sql` where json_each.value <> ${body.id});`);
-      await tx.run(updateQuery);
+      updateGroceriesQuery.append(sql` where json_each.value <> ${body.id});`);
+      await tx.run(updateGroceriesQuery);
+
+      // update presets to remove category from stores
+      const updatePresetsQuery = sql`update ${presets}`;
+      updatePresetsQuery.append(
+        sql.raw(
+          ` set ${presets.categories.name} = (select json_group_array(value) from json_each(${presets.categories.name})`,
+        ),
+      );
+      updatePresetsQuery.append(sql` where json_each.value <> ${body.id});`);
+      await tx.run(updatePresetsQuery);
     });
   } catch (err) {
     console.error(err);
