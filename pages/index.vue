@@ -17,6 +17,7 @@ const { data, pending, error, refresh } = await useFetch("/api/groceries");
         <AddGrocery class="mr-1" @item-added="refresh" />
         <ClearList class="ml-1" @items-cleared="refresh" />
       </span>
+      <p>TODO: implement this list</p>
       <v-select
         :model-value="'None'"
         :items="['None', 'Wegmans']"
