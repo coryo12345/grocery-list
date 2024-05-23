@@ -106,7 +106,7 @@ async function addItem() {
 </script>
 
 <template>
-  <v-dialog v-model="dialogValue" max-width="600">
+  <v-dialog v-model="dialogValue" max-width="600" persistent>
     <template #activator>
       <v-btn v-bind="$attrs" color="success" @click="dialogValue = true">
         Add Grocery

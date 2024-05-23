@@ -26,7 +26,7 @@ async function clear() {
 </script>
 
 <template>
-  <v-dialog v-model="dialogValue" max-width="500">
+  <v-dialog v-model="dialogValue" max-width="600" persistent>
     <template #activator>
       <v-btn v-bind="$attrs" color="error" @click="dialogValue = true">
         Clear List

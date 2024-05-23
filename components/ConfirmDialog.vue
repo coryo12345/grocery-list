@@ -34,7 +34,7 @@ async function save() {
         {{ props.activatorText ?? "Confirm" }}
       </v-btn>
     </slot>
-    <v-dialog v-model="dialogModel">
+    <v-dialog v-model="dialogModel" max-width="600" persistent>
       <v-card
         class="mx-auto"
         max-width="320"

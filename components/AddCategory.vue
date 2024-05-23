@@ -48,7 +48,7 @@ async function addCategory() {
 </script>
 
 <template>
-  <v-dialog v-model="dialog">
+  <v-dialog v-model="dialog" max-width="600" persistent>
     <template #activator>
       <v-btn v-bind="$attrs" color="success" @click="dialog = true">
         Add Category

@@ -80,7 +80,7 @@ async function editItem() {
 </script>
 
 <template>
-  <v-dialog v-model="dialog">
+  <v-dialog v-model="dialog" max-width="600" persistent>
     <template #activator>
       <v-btn
         v-if="!props.item"
