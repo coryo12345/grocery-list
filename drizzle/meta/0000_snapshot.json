@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "0f37d085-a7b0-4120-9dc9-f31428a66407",
+  "id": "390b4b8a-fb22-4d75-96b3-138e277876c0",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "all_groceries": {
@@ -142,53 +142,39 @@
     "presets": {
       "name": "presets",
       "columns": {
-        "preset_id": {
-          "name": "preset_id",
+        "id": {
+          "name": "id",
           "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
+          "primaryKey": true,
+          "notNull": true,
           "autoincrement": false
         },
-        "category_id": {
-          "name": "category_id",
-          "type": "integer",
+        "name": {
+          "name": "name",
+          "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
-        "order": {
-          "name": "order",
-          "type": "integer",
+        "categories": {
+          "name": "categories",
+          "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         }
       },
-      "indexes": {},
-      "foreignKeys": {
-        "presets_category_id_categories_id_fk": {
-          "name": "presets_category_id_categories_id_fk",
-          "tableFrom": "presets",
-          "tableTo": "categories",
-          "columnsFrom": [
-            "category_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "presets_preset_id_category_id_pk": {
+      "indexes": {
+        "presets_name_unique": {
+          "name": "presets_name_unique",
           "columns": [
-            "category_id",
-            "preset_id"
+            "name"
           ],
-          "name": "presets_preset_id_category_id_pk"
+          "isUnique": true
         }
       },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     }
   },

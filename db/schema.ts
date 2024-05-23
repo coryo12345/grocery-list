@@ -25,16 +25,8 @@ export const categories = sqliteTable("categories", {
   name: text("name").notNull().unique(),
 });
 
-export const presets = sqliteTable(
-  "presets",
-  {
-    presetId: integer("preset_id"),
-    categoryId: integer("category_id").references(() => categories.id),
-    order: integer("order"),
-  },
-  (table) => {
-    return {
-      pk: primaryKey({ columns: [table.presetId, table.categoryId] }),
-    };
-  },
-);
+export const presets = sqliteTable("presets", {
+  id: integer("id").primaryKey(),
+  name: text("name").notNull().unique(),
+  categories: text("categories", { mode: "json" }).notNull(),
+});

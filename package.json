@@ -20,6 +20,7 @@
     "sass": "^1.77.0",
     "vite-plugin-vuetify": "^2.0.3",
     "vue": "^3.4.21",
+    "vue-draggable-plus": "^0.4.1",
     "vue-router": "^4.3.0",
     "vuetify": "^3.6.4"
   },
