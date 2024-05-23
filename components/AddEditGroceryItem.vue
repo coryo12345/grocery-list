@@ -130,17 +130,11 @@ async function editItem() {
           />
         </v-card-text>
         <v-card-actions>
-          <v-btn
-            color="error"
-            variant="text"
-            :disabled="loading"
-            @click="dialog = false"
-          >
+          <v-btn color="error" :disabled="loading" @click="dialog = false">
             Cancel
           </v-btn>
           <v-btn
             color="success"
-            variant="text"
             type="submit"
             :loading="loading"
             :disabled="!valid || loading"
