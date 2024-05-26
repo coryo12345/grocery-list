@@ -11,12 +11,12 @@ export default defineEventHandler(async (event) => {
     const db = await getDb();
 
     const newStore = await db.transaction(async (tx) => {
-      const categoryIdsRaw = await db
+      const categoryIdsRaw = await tx
         .select({ id: categories.id })
         .from(categories)
         .orderBy(categories.name);
       const categoryIds = categoryIdsRaw.map((x) => x.id);
-      const stores = await db
+      const stores = await tx
         .insert(presets)
         .values({ name: body.name, categories: categoryIds })
         .returning();

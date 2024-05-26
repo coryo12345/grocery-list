@@ -36,5 +36,12 @@ async function storeAdded(id: number) {
   <p v-if="!selectedStore" class="text-center">
     Select a store or create one to get started
   </p>
-  <StoreOrder v-else :categories="categories ?? []" :store="selectedStore" />
+  <div v-else>
+    <v-divider />
+    <StoreEdit
+      :categories="categories ?? []"
+      :used-names="usedNames"
+      :store="selectedStore"
+    />
+  </div>
 </template>

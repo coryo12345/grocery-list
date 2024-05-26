@@ -5,15 +5,17 @@ import { drizzle } from "drizzle-orm/libsql";
 let db: ReturnType<typeof drizzle>;
 
 async function createConnection() {
+  const dev = ["local", "dev", "development"].includes(
+    process.env.NUXT_ENVIRONMENT ?? "",
+  );
+
   const libsql = createClient({
     url: "file:sqlite.db",
   });
 
-  db = drizzle(libsql, { logger: true });
+  db = drizzle(libsql, { logger: dev });
 
-  if (
-    ["local", "dev", "development"].includes(process.env.NUXT_ENVIRONMENT ?? "")
-  ) {
+  if (dev) {
     await db.run(sql`PRAGMA journal_mode=WAL;`);
   }
 }
