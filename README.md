@@ -1,5 +1,12 @@
 # Nuxt 3 Minimal Starter
 
+## TODO
+
+- update readme
+- create turso db
+- test with live db
+- deploy!
+
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
 ## Setup
