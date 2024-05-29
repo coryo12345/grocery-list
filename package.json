@@ -3,7 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build-sw": "SW=true nuxt build",
     "build": "nuxt build",
+    "dev-sw": "SW=true nuxt dev",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
@@ -14,6 +16,7 @@
   "dependencies": {
     "@libsql/client": "^0.6.0",
     "@mdi/font": "^7.4.47",
+    "@vite-pwa/nuxt": "latest",
     "drizzle-orm": "^0.30.10",
     "jsonwebtoken": "^9.0.2",
     "nuxt": "^3.11.2",
