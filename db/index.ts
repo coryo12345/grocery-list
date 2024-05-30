@@ -1,21 +1,32 @@
-import { createClient } from "@libsql/client";
+import { createClient, type Config } from "@libsql/client";
 import { sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/libsql";
 
 let db: ReturnType<typeof drizzle>;
 
 async function createConnection() {
-  const dev = ["local", "dev", "development"].includes(
+  const local = ["local", "localhost"].includes(
+    process.env.NUXT_ENVIRONMENT ?? "",
+  );
+  const dev = ["dev", "development"].includes(
     process.env.NUXT_ENVIRONMENT ?? "",
   );
 
-  const libsql = createClient({
+  let connectionConfig: Config = {
     url: "file:sqlite.db",
-  });
+  };
+  if (!local) {
+    connectionConfig = {
+      url: process.env.APP_DB_URL ?? "",
+      authToken: process.env.APP_DB_TOKEN ?? "",
+    };
+  }
 
-  db = drizzle(libsql, { logger: dev });
+  const libsql = createClient(connectionConfig);
 
-  if (dev) {
+  db = drizzle(libsql, { logger: dev || local });
+
+  if (local) {
     await db.run(sql`PRAGMA journal_mode=WAL;`);
   }
 }

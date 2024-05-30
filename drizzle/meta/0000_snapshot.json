@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "390b4b8a-fb22-4d75-96b3-138e277876c0",
+  "id": "77d3b4a8-a86f-493f-8bb9-c0b10338f36d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "all_groceries": {
