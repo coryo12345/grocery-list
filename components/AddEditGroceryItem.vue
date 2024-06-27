@@ -34,7 +34,9 @@ watch(
 );
 
 const nameNotInUse = (val: string) =>
-  !props.usedNames.includes(val) || "This name is already in use";
+  !props.usedNames.includes(val) ||
+  props.item?.name === val ||
+  "This name is already in use";
 
 function submit() {
   if (props.item) {
