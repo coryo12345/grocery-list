@@ -71,6 +71,15 @@ async function editItem() {
   loading.value = true;
   error.value = null;
   try {
+    await $fetch("/api/groceryItem", {
+      method: "PUT",
+      body: JSON.stringify({
+        id: props.item?.id,
+        name: mutableItem.name,
+        description: mutableItem.description,
+        categories: mutableItem.categories,
+      }),
+    });
     emit("item-added");
     dialog.value = false;
   } catch (err) {

@@ -42,6 +42,7 @@ async function deleteItem() {
         :categories="props.categories"
         :used-names="props.usedNames"
         :item="props.item"
+        @item-added="emit('item-changed')"
       />
       <ConfirmDialog
         text="Deleting this item will also delete all occurances of this item from your current grocery list"
