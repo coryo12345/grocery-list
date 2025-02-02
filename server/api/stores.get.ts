@@ -1,14 +1,21 @@
+import { eq } from "drizzle-orm";
 import { getDb } from "~/db";
 import { categories, presets } from "~/db/schema";
 
 // GETS ALL stores
 export default defineEventHandler(async (event) => {
-  requireAuth(event);
+  const session = requireAuth(event);
 
   try {
     const db = await getDb();
-    const categoryIds = await db.select({ id: categories.id }).from(categories);
-    const storesRaw = await db.select().from(presets);
+    const categoryIds = await db
+      .select({ id: categories.id })
+      .from(categories)
+      .where(eq(categories.householdId, session.householdId));
+    const storesRaw = await db
+      .select()
+      .from(presets)
+      .where(eq(presets.householdId, session.householdId));
     let stores = storesRaw.map((store) => {
       // remove deleted categories
       store.categories = store.categories.filter((id) =>

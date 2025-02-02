@@ -1,10 +1,10 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { getDb } from "~/db";
 import { groceryList } from "~/db/schema";
 
 // UPDATE GROCERY_LIST ITEM
 export default defineEventHandler(async (event) => {
-  requireAuth(event);
+  const session = requireAuth(event);
   const body = await readBody(event);
 
   if (typeof body.id !== "number") {
@@ -16,13 +16,19 @@ export default defineEventHandler(async (event) => {
 
   const propertiesToChange = { ...body };
   delete propertiesToChange.id;
+  delete propertiesToChange.householdId;
 
   try {
     const db = await getDb();
     await db
       .update(groceryList)
       .set(propertiesToChange)
-      .where(eq(groceryList.id, body.id));
+      .where(
+        and(
+          eq(groceryList.id, body.id),
+          eq(groceryList.householdId, session.householdId),
+        ),
+      );
   } catch (err) {
     throw createError({
       statusCode: 500,

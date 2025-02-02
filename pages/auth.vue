@@ -4,15 +4,30 @@ import { useDisplay } from "vuetify";
 definePageMeta({
   layout: "blank",
 });
+
 const router = useRouter();
+const { data } = await useFetch("/api/auth", {
+  getCachedData: () => undefined,
+});
+if (data.value) {
+  await router.push("/");
+}
 
 const { mobile } = useDisplay();
 
 const formValid = ref(false);
-
+const household = ref("");
 const password = ref("");
+const remember = ref(true);
 const showErr = ref(false);
 const loading = ref(false);
+
+onMounted(() => {
+  if (import.meta.client) {
+    const h = localStorage.getItem("grocery-household");
+    if (h) household.value = h;
+  }
+});
 
 async function signIn() {
   showErr.value = false;
@@ -20,13 +35,19 @@ async function signIn() {
 
   const resp = await $fetch("/api/auth", {
     method: "POST",
-    body: JSON.stringify({ password: password.value }),
+    body: JSON.stringify({
+      household: household.value,
+      password: password.value,
+    }),
   });
   loading.value = false;
 
   if ((resp as any).err) {
     showErr.value = true;
   } else {
+    if (remember.value) {
+      localStorage.setItem("grocery-household", household.value);
+    }
     router.push("/");
   }
 }
@@ -40,14 +61,29 @@ async function signIn() {
     >
       <v-card class="auth-card" :elevation="mobile ? 0 : 2">
         <template #title>Sign In</template>
-        <template #subtitle>Enter password to access site</template>
+        <template #subtitle>Enter credentials to access site</template>
         <template #text>
+          <v-text-field
+            v-model="household"
+            label="Household"
+            variant="outlined"
+            :disabled="loading"
+            :rules="[formRules.required]"
+            class="mb-2"
+          />
           <v-text-field
             v-model="password"
             label="Password"
             type="password"
             variant="outlined"
             :rules="[formRules.required]"
+            :disabled="loading"
+          />
+          <v-checkbox
+            v-model="remember"
+            label="Remember Household"
+            color="primary"
+            hide-details
             :disabled="loading"
           />
           <v-alert
@@ -63,6 +99,7 @@ async function signIn() {
             variant="elevated"
             :disabled="loading"
             :loading="loading"
+            class="ml-auto"
           >
             Submit
           </v-btn>

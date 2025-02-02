@@ -17,7 +17,6 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     jwtKey: "",
-    appPassword: "",
   },
 
   devServer: {
@@ -75,4 +74,6 @@ export default defineNuxtConfig({
       type: "module",
     },
   },
+
+  compatibilityDate: "2025-02-02",
 });

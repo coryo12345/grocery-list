@@ -1,5 +1,4 @@
 const required = (val: string) => {
-  console.log(val);
   return (val && !!val.length) || "Field is required";
 };
 

@@ -1,30 +1,35 @@
-# Nuxt 3 Minimal Starter
+# Grocery App
 
-## TODO
-
-- update readme
-- create turso db
-- test with live db
-- deploy!
-
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A grocery app that shares lists across a household.
 
 ## Setup
 
 Make sure to install the dependencies:
 
 ```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
 bun install
+```
+
+## Env
+
+Create a `.env` file based on the `.env_example` file.
+
+## Migrate DB
+
+Run DB migrations:
+
+```bash
+bun run db:migrate
+```
+
+This will create a local sqlite.db file.
+
+## Create a household
+
+You need to create a household to login. This is what you use to login.
+
+```bash
+bun run scripts/addHousehold <username> <password>
 ```
 
 ## Development Server
@@ -32,51 +37,5 @@ bun install
 Start the development server on `http://localhost:3000`:
 
 ```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
 bun run dev
 ```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.

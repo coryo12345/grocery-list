@@ -3,7 +3,7 @@ import { allGroceries } from "~/db/schema";
 
 // CREATES A GROCERY ITEM (doesnt add to list)
 export default defineEventHandler(async (event) => {
-  requireAuth(event);
+  const session = requireAuth(event);
 
   const body = await readBody(event);
 
@@ -13,6 +13,7 @@ export default defineEventHandler(async (event) => {
       .insert(allGroceries)
       .values({
         name: body.name,
+        householdId: session.householdId,
         description: body.description,
         categories: body.categories,
       })

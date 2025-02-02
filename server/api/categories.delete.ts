@@ -1,10 +1,10 @@
-import { eq, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { getDb } from "~/db";
 import { allGroceries, categories, presets } from "~/db/schema";
 
 // DELETE a category
 export default defineEventHandler(async (event) => {
-  requireAuth(event);
+  const session = requireAuth(event);
 
   const body = await readBody(event);
 
@@ -18,8 +18,30 @@ export default defineEventHandler(async (event) => {
   const db = await getDb();
 
   try {
+    // first make sure we have permission to do this...
+    const category = await db
+      .select()
+      .from(categories)
+      .where(
+        and(
+          eq(categories.householdId, session.householdId),
+          eq(categories.id, body.id),
+        ),
+      );
+    if (category.length === 0) {
+      throw new Error("This category does not belong to this household");
+    }
+
+    // it is safe to delete
     await db.transaction(async (tx) => {
-      await tx.delete(categories).where(eq(categories.id, body.id));
+      await tx
+        .delete(categories)
+        .where(
+          and(
+            eq(categories.householdId, session.householdId),
+            eq(categories.id, body.id),
+          ),
+        );
 
       // now update all_groceries to remove category from items
       const updateGroceriesQuery = sql`update ${allGroceries}`;

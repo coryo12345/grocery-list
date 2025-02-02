@@ -11,12 +11,12 @@ await migrate(db, { migrationsFolder: "./drizzle" });
 await db
   .insert(categories)
   .values([
-    { id: 0, name: "Produce" },
-    { id: 1, name: "Seafood" },
-    { id: 2, name: "Bread" },
-    { id: 3, name: "Meat" },
-    { id: 4, name: "Dairy" },
-    { id: 5, name: "Frozen" },
+    { id: 0, householdId: 1, name: "Produce" },
+    { id: 1, householdId: 1, name: "Seafood" },
+    { id: 2, householdId: 1, name: "Bread" },
+    { id: 3, householdId: 1, name: "Meat" },
+    { id: 4, householdId: 1, name: "Dairy" },
+    { id: 5, householdId: 1, name: "Frozen" },
   ])
   .onConflictDoUpdate({
     target: categories.id,

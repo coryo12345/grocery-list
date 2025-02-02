@@ -17,6 +17,7 @@
     "@libsql/client": "^0.6.0",
     "@mdi/font": "^7.4.47",
     "@vite-pwa/nuxt": "latest",
+    "bcrypt": "^5.1.1",
     "drizzle-orm": "^0.30.10",
     "jsonwebtoken": "^9.0.2",
     "nuxt": "^3.11.2",
@@ -28,6 +29,7 @@
     "vuetify": "^3.6.4"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/bun": "^1.1.1",
     "@types/jsonwebtoken": "^9.0.6",
     "dotenv": "^16.4.5",

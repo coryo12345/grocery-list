@@ -1,10 +1,10 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { getDb } from "~/db";
 import { allGroceries, groceryList } from "~/db/schema";
 
 // ADD GROCERY (upsert)
 export default defineEventHandler(async (event) => {
-  requireAuth(event);
+  const session = requireAuth(event);
   const body = await readBody(event);
   const id = body.id;
 
@@ -28,12 +28,18 @@ export default defineEventHandler(async (event) => {
           description: body.description,
           categories: body.categories,
         })
-        .where(eq(allGroceries.id, id));
+        .where(
+          and(
+            eq(allGroceries.id, id),
+            eq(allGroceries.householdId, session.householdId),
+          ),
+        );
     } else {
       const item = await db
         .insert(allGroceries)
         .values({
           name: body.name,
+          householdId: session.householdId,
           description: body.description,
           categories: body.categories,
         })
@@ -46,6 +52,7 @@ export default defineEventHandler(async (event) => {
       .values({
         itemId: itemId,
         checked: false,
+        householdId: session.householdId,
         count: body.count,
         note: body.note,
       })

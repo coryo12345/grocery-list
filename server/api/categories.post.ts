@@ -1,9 +1,10 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { getDb } from "~/db";
 import { categories } from "~/db/schema";
 
+// UPDATE CATEGORY
 export default defineEventHandler(async (event) => {
-  requireAuth(event);
+  const session = requireAuth(event);
 
   const body = (await readBody(event)) as typeof categories.$inferSelect;
 
@@ -19,7 +20,12 @@ export default defineEventHandler(async (event) => {
     await db
       .update(categories)
       .set({ name: body.name })
-      .where(eq(categories.id, body.id));
+      .where(
+        and(
+          eq(categories.householdId, session.householdId),
+          eq(categories.id, body.id),
+        ),
+      );
   } catch (err) {
     throw createError({
       statusCode: 500,

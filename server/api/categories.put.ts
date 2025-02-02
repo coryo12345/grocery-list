@@ -1,8 +1,10 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { getDb } from "~/db";
 import { categories } from "~/db/schema";
+
+// CREATE CATEGORY
 export default defineEventHandler(async (event) => {
-  requireAuth(event);
+  const session = requireAuth(event);
   const body = (await readBody(event)) as Omit<
     typeof categories.$inferInsert,
     "id"
@@ -15,7 +17,12 @@ export default defineEventHandler(async (event) => {
     row = await db
       .select()
       .from(categories)
-      .where(eq(categories.name, body.name));
+      .where(
+        and(
+          eq(categories.householdId, session.householdId),
+          eq(categories.name, body.name),
+        ),
+      );
   } catch (err) {
     throw createError({
       statusCode: 500,
@@ -35,6 +42,7 @@ export default defineEventHandler(async (event) => {
       .insert(categories)
       .values({
         name: body.name,
+        householdId: session.householdId,
       })
       .returning();
   } catch (err) {
