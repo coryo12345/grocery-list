@@ -135,3 +135,6 @@ dist
 *.db-wal
 
 .DS_Store
+
+# ignore prod dumps
+dump.sql
